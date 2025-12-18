@@ -6,12 +6,9 @@ from .forms import LoginForm, RegisterForm
 
 bp = Blueprint('main', __name__)
 
-# ----------------------------
-# Main pages
-# ----------------------------
 @bp.route('/')
 def index():
-    albums = Album.query.all()
+    albums = Album.query.order_by(Album.release_date.desc()).limit(3).all()
     return render_template('index.html', albums=albums)
 
 @bp.route('/about')
@@ -22,29 +19,29 @@ def about():
 def history():
     return render_template('history.html')
 
+@bp.route('/albums')
+def albums():
+    all_albums = Album.query.order_by(Album.release_date.desc()).all()
+    return render_template('albums.html', albums=all_albums)
+
 @bp.route('/album/<int:album_id>')
-def album(album_id):
+def album_detail(album_id):
     album = Album.query.get_or_404(album_id)
-    return render_template('album.html', album=album)
+    return render_template('album_detail.html', album=album)
 
 @bp.route('/album/latest')
 def latest_album():
     album = Album.query.order_by(Album.id.desc()).first()
-    return render_template('album.html', album=album)
+    return render_template('album_detail.html', album=album)
 
-# ----------------------------
-# User authentication
-# ----------------------------
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        # Check if user already exists
         if User.query.filter_by(username=form.username.data).first():
             flash('Username already exists')
             return redirect(url_for('main.register'))
 
-        # Hash the password and create a new user
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
         user = User(username=form.username.data, password=hashed_password)
         db.session.add(user)
@@ -58,7 +55,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        # Verify password
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
             return redirect(url_for('main.index'))
@@ -71,14 +67,10 @@ def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
-# ----------------------------
-# Album CRUD (protected)
-# ----------------------------
 @bp.route('/album/add', methods=['GET', 'POST'])
 @login_required
-def add_album():
+def album_add():
     if request.method == 'POST':
-        # Create new album
         title = request.form['title']
         description = request.form['description']
         release_date = request.form['release_date']
@@ -88,30 +80,28 @@ def add_album():
         db.session.add(album)
         db.session.commit()
         flash('Album added!')
-        return redirect(url_for('main.index'))
-    return render_template('add_album.html')
+        return redirect(url_for('main.albums'))
+    return render_template('album_form.html')
 
-@bp.route('/album/edit/<int:album_id>', methods=['GET', 'POST'])
+@bp.route('/album/<int:album_id>/edit', methods=['GET', 'POST'])
 @login_required
-def edit_album(album_id):
+def album_edit(album_id):
     album = Album.query.get_or_404(album_id)
     if request.method == 'POST':
-        # Update album fields
         album.title = request.form['title']
         album.description = request.form['description']
         album.release_date = request.form['release_date']
         album.cover_image = request.form['cover_image']
         db.session.commit()
         flash('Album updated!')
-        return redirect(url_for('main.album', album_id=album.id))
-    return render_template('edit_album.html', album=album)
+        return redirect(url_for('main.album_detail', album_id=album.id))
+    return render_template('album_form.html', album=album)
 
-@bp.route('/album/delete/<int:album_id>', methods=['POST'])
+@bp.route('/album/<int:album_id>/delete', methods=['POST'])
 @login_required
-def delete_album(album_id):
-    # Delete album from database
+def album_delete(album_id):
     album = Album.query.get_or_404(album_id)
     db.session.delete(album)
     db.session.commit()
     flash('Album deleted!')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.albums'))
