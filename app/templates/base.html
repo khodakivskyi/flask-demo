@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Музичний гурт</title>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Головна</a> |
+        <a href="{{ url_for('about') }}">Про проект</a> |
+        <a href="{{ url_for('history') }}">Історія гурту</a>
+    </nav>
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>
