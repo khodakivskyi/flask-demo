@@ -1,5 +1,55 @@
 {% extends "base.html" %}
+
+{% block title %}Про проєкт - Music Band{% endblock %}
+
 {% block content %}
-<h1>Про проект</h1>
-<p>Інформація про гурт і його діяльність.</p>
+<div class="space-y-8">
+    <section class="rounded-xl border border-neutral-200 bg-white px-5 sm:px-7 py-7 sm:py-8">
+        <header class="mb-6">
+            <p class="text-[11px] tracking-[0.18em] text-neutral-500 uppercase">
+                Про гурт
+            </p>
+            <h1 class="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
+                Проєкт Music Band
+            </h1>
+            <p class="mt-3 text-sm sm:text-base text-neutral-600 max-w-2xl leading-relaxed">
+                Цей сайт — домашня сторінка вигаданого музичного гурту, створена як навчальний
+                проєкт на Flask. Тут зібрана інформація про музику, історію та релізи колективу.
+            </p>
+        </header>
+
+        <div class="grid gap-6 md:grid-cols-2 text-sm text-neutral-700">
+            <div class="space-y-3">
+                <h2 class="text-sm font-semibold text-neutral-900">Що це за проєкт</h2>
+                <p class="leading-relaxed">
+                    Мета цього сайту — продемонструвати роботу з шаблонами, авторизацією,
+                    базою даних та формами у Flask, а також створити сучасний інтерфейс
+                    для презентації музичного гурту.
+                </p>
+                <p class="leading-relaxed">
+                    Ви можете переглядати інформацію про гурт, історію створення, а також
+                    працювати з акаунтом (реєстрація та вхід).
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <h2 class="text-sm font-semibold text-neutral-900">Технології</h2>
+                <ul class="space-y-1.5 text-neutral-700">
+                    <li class="flex items-center gap-2">
+                        <span class="h-1.5 w-1.5 rounded-full bg-neutral-900"></span>
+                        Flask, Jinja2, Flask‑Login
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="h-1.5 w-1.5 rounded-full bg-neutral-900"></span>
+                        SQLite + SQLAlchemy
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="h-1.5 w-1.5 rounded-full bg-neutral-900"></span>
+                        Tailwind CSS (через CDN)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock %}

@@ -27,6 +27,11 @@ def album(album_id):
     album = Album.query.get_or_404(album_id)
     return render_template('album.html', album=album)
 
+@bp.route('/album/latest')
+def latest_album():
+    album = Album.query.order_by(Album.id.desc()).first()
+    return render_template('album.html', album=album)
+
 # ----------------------------
 # User authentication
 # ----------------------------

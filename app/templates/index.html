@@ -1,11 +1,86 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Головна</title>
-</head>
-<body>
-    <h1>Hello World!</h1>
-    <p>Це головна сторінка.</p>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Music Band{% endblock %}
+
+{% block content %}
+<div class="space-y-10">
+  <section class="space-y-3">
+    <p class="text-[11px] tracking-[0.18em] uppercase text-neutral-500">
+      Music Band
+    </p>
+    <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
+      Домашня сторінка вигаданого музичного гурту
+    </h1>
+    <p class="text-sm sm:text-base text-neutral-600 max-w-2xl leading-relaxed">
+      Цей сайт створений як невеликий навчальний проєкт на Flask. Тут зібрані
+      базові сторінки: опис проєкту, коротка історія гурту та інформація про
+      альбоми, які зберігаються в базі даних.
+    </p>
+    <div class="flex flex-wrap items-center gap-3 pt-1.5">
+      <a href="{{ url_for('main.latest_album') }}"
+         class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-black">
+        Перейти до останнього альбому
+      </a>
+      <a href="{{ url_for('main.about') }}"
+         class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100">
+        Детальніше про проєкт
+      </a>
+    </div>
+  </section>
+
+  <section class="grid gap-4 md:grid-cols-3">
+    <div class="rounded-xl border border-neutral-200 bg-white p-4">
+      <h2 class="text-sm font-semibold text-neutral-900">
+        Структура сайту
+      </h2>
+      <p class="mt-2 text-sm text-neutral-600">
+        Головна, сторінка проєкту, історія гурту та сторінки альбомів —
+        мінімальний набір для прикладу невеликого застосунку.
+      </p>
+    </div>
+
+    <div class="rounded-xl border border-neutral-200 bg-white p-4">
+      <h2 class="text-sm font-semibold text-neutral-900">
+        Технічна частина
+      </h2>
+      <p class="mt-2 text-sm text-neutral-600">
+        Flask, шаблони Jinja2, робота з формами та базою даних SQLite
+        через SQLAlchemy.
+      </p>
+    </div>
+
+    <div class="rounded-xl border border-neutral-200 bg-white p-4">
+      <h2 class="text-sm font-semibold text-neutral-900">
+        Альбоми
+      </h2>
+      <p class="mt-2 text-sm text-neutral-600">
+        Дані про альбоми зберігаються у базі даних. Нижче — список доступних записів.
+      </p>
+    </div>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-sm font-semibold text-neutral-900">
+      Альбоми гурту
+    </h2>
+    <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+      {% for album in albums %}
+      <a href="{{ url_for('main.album', album_id=album.id) }}"
+         class="rounded-lg border border-neutral-200 bg-white px-3 py-3 hover:bg-neutral-50">
+        <div class="text-sm font-medium text-neutral-900">
+          {{ album.title }}
+        </div>
+        <div class="mt-1 text-xs text-neutral-600">
+          Рік: {{ album.year }}
+        </div>
+      </a>
+      {% endfor %}
+      {% if not albums %}
+      <p class="text-sm text-neutral-500">
+        Альбоми поки не додані.
+      </p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

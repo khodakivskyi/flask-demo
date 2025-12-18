@@ -2,32 +2,79 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Music Band{% endblock %}</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['system-ui', 'Segoe UI', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="min-h-screen bg-neutral-50 text-neutral-900 font-sans antialiased">
 
-<nav class="bg-gray-800 text-white p-4">
-    <ul class="flex space-x-4">
-        <li><a href="{{ url_for('main.index') }}" class="hover:text-yellow-300">Home</a></li>
-        <li><a href="{{ url_for('main.about') }}" class="hover:text-yellow-300">About</a></li>
-        <li><a href="{{ url_for('main.history') }}" class="hover:text-yellow-300">History</a></li>
-        {% if current_user.is_authenticated %}
-        <li><a href="{{ url_for('main.logout') }}" class="hover:text-yellow-300">Logout</a></li>
-        {% else %}
-        <li><a href="{{ url_for('main.login') }}" class="hover:text-yellow-300">Login</a></li>
-        <li><a href="{{ url_for('main.register') }}" class="hover:text-yellow-300">Register</a></li>
-        {% endif %}
-    </ul>
-</nav>
+<div class="min-h-screen flex flex-col">
+    <nav class="border-b border-neutral-200 bg-white/95">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-14 gap-4">
+                <a href="{{ url_for('main.index') }}" class="flex items-center">
+                    <span class="text-sm font-medium tracking-tight text-neutral-900">
+                        Music Band
+                    </span>
+                </a>
 
-<div class="container mx-auto p-4">
-    {% block content %}{% endblock %}
+                <div class="flex items-center gap-4 text-xs sm:text-sm">
+                    <a href="{{ url_for('main.index') }}" class="text-neutral-700 hover:text-black">
+                        Головна
+                    </a>
+                    <a href="{{ url_for('main.about') }}" class="text-neutral-700 hover:text-black">
+                        Про проєкт
+                    </a>
+                    <a href="{{ url_for('main.history') }}" class="text-neutral-700 hover:text-black">
+                        Історія
+                    </a>
+
+                    {% if current_user.is_authenticated %}
+                        <form action="{{ url_for('main.logout') }}" method="post" class="ml-1">
+                            <button type="submit"
+                                    class="inline-flex items-center rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-800 hover:bg-neutral-100">
+                                Вийти
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('main.login') }}"
+                           class="inline-flex items-center rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-800 hover:bg-neutral-100">
+                            Вхід
+                        </a>
+                        <a href="{{ url_for('main.register') }}"
+                           class="inline-flex items-center rounded-full bg-neutral-900 px-3 py-1 text-[11px] font-medium text-white hover:bg-black">
+                            Реєстрація
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="border-t border-neutral-200 bg-white/95">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-center gap-1.5 text-[11px] text-neutral-500">
+            <p>© 2025 Music Band.</p>
+        </div>
+    </footer>
 </div>
-
-<footer class="bg-gray-800 text-white p-4 text-center">
-    © 2025 Music Band
-</footer>
 
 </body>
 </html>
