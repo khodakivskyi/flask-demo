@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
 from .models import db, Album, User
 from .forms import LoginForm, RegisterForm, AlbumForm
 from .services.album_service import (
     create_album, get_album, update_album, delete_album
+)
+from .services.user_service import (
+    create_user, get_user, get_user_by_username, authenticate_user,
+    update_user, delete_user
 )
 
 bp = Blueprint('main', __name__)
@@ -53,16 +56,12 @@ def register():
 
     form = RegisterForm()
     if form.validate_on_submit():
-        if User.query.filter_by(username=form.username.data).first():
-            flash('Це ім\'я користувача вже зайняте')
-            return redirect(url_for('main.register'))
-
-        hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
-        user = User(username=form.username.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash('Реєстрацію успішно завершено! Тепер ви можете увійти')
-        return redirect(url_for('main.login'))
+        try:
+            user = create_user(form.username.data, form.password.data)
+            flash('Реєстрацію успішно завершено! Тепер ви можете увійти')
+            return redirect(url_for('main.login'))
+        except ValueError as e:
+            flash(str(e))
     return render_template('register.html', form=form)
 
 
@@ -73,8 +72,8 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password, form.password.data):
+        user = authenticate_user(form.username.data, form.password.data)
+        if user:
             login_user(user)
             flash(f'Вітаємо, {user.username}! Ви успішно увійшли')
             next_page = request.args.get('next')
@@ -125,6 +124,7 @@ def album_edit(album_id):
         flash(f'Альбом "{updated_album.title}" успішно оновлено!')
         return redirect(url_for('main.album_detail', album_id=album_id))
 
+    # Заповнюємо форму поточними даними
     form.title.data = album.title
     form.description.data = album.description
     form.cover_image.data = album.cover_image
@@ -146,3 +146,27 @@ def album_delete(album_id):
     title = delete_album(album_id)
     flash(f'Альбом "{title}" успішно видалено!')
     return redirect(url_for('main.albums'))
+
+
+# === USER CRUD (ADMIN) ===
+@bp.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
+@login_required
+def user_edit(user_id):
+    form = RegisterForm()
+    user = get_user(user_id)
+
+    if form.validate_on_submit():
+        update_user(user_id, form.username.data, form.password.data)
+        flash(f'Користувача "{user.username}" успішно оновлено!')
+        return redirect(url_for('main.index'))
+
+    form.username.data = user.username
+    return render_template('user_form.html', form=form, user=user)
+
+
+@bp.route('/user/<int:user_id>/delete', methods=['POST'])
+@login_required
+def user_delete(user_id):
+    username = delete_user(user_id)
+    flash(f'Користувача "{username}" успішно видалено!')
+    return redirect(url_for('main.index'))

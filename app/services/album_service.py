@@ -5,7 +5,7 @@ def create_album(title, description, release_date, cover_image):
     album = Album(
         title=title,
         description=description,
-        release_date=release_date.strftime('%Y-%m-%d') if hasattr(release_date, 'strftime') else release_date,  # ✅
+        release_date=release_date.strftime('%Y-%m-%d') if hasattr(release_date, 'strftime') else release_date,
         cover_image=cover_image
     )
     db.session.add(album)
@@ -20,7 +20,7 @@ def update_album(album_id, title, description, release_date, cover_image):
     album = Album.query.get_or_404(album_id)
     album.title = title
     album.description = description
-    album.release_date = release_date.strftime('%Y-%m-%d') if hasattr(release_date, 'strftime') else release_date  # ✅
+    album.release_date = release_date.strftime('%Y-%m-%d') if hasattr(release_date, 'strftime') else release_date
     album.cover_image = cover_image
     db.session.commit()
     return album
