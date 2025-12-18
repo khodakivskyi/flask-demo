@@ -1,5 +1,202 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Про проект</h1>
-<p>Інформація про гурт і його діяльність.</p>
+about_tailwind = """{% extends "base.html" %}
+
+{% block title %}Про проект - Музичний Гурт{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
 {% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="text-center mb-12 animate-fade-in-up">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full mb-6 shadow-lg">
+            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+        </div>
+        <h1 class="text-5xl font-bold gradient-text mb-4">Про проект</h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">Інформація про гурт і його діяльність.</p>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 mb-8 border border-white/20 animate-fade-in-up" style="animation-delay: 0.1s;">
+        <p class="text-lg text-gray-200 leading-relaxed mb-6">
+            Цей веб-сайт створено для представлення музичного гурту та його творчості.
+            Тут ви знайдете всю необхідну інформацію про наші альбоми, історію та досягнення.
+        </p>
+
+        <!-- Features Section -->
+        <div class="mt-10">
+            <h3 class="text-3xl font-bold text-white mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full mr-4"></span>
+                Функціонал сайту
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flex items-start space-x-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <div class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">Перегляд інформації про гурт</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <div class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">Дискографія з детальною інформацією про альбоми</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <div class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">Система авторизації користувачів</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <div class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">CRUD операції для альбомів (додавання, редагування, видалення)</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <div class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">Адаптивний дизайн для всіх пристроїв</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technologies Section -->
+        <div class="mt-12">
+            <h3 class="text-3xl font-bold text-white mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full mr-4"></span>
+                Технології
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Backend -->
+                <div class="bg-gradient-to-br from-purple-500/20 to-indigo-600/20 rounded-xl p-6 border border-purple-500/30 hover:border-purple-400/50 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z"/>
+                                <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z"/>
+                                <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z"/>
+                            </svg>
+                        </div>
+                        <h5 class="text-xl font-bold text-white">Backend</h5>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            Flask (Python web framework)
+                        </li>
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            SQLAlchemy (ORM)
+                        </li>
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            Flask-Login (авторизація)
+                        </li>
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            PostgreSQL/SQLite (база даних)
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Frontend -->
+                <div class="bg-gradient-to-br from-indigo-500/20 to-blue-600/20 rounded-xl p-6 border border-indigo-500/30 hover:border-indigo-400/50 transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 100 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 100-4V6z"/>
+                            </svg>
+                        </div>
+                        <h5 class="text-xl font-bold text-white">Frontend</h5>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></span>
+                            Tailwind CSS
+                        </li>
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></span>
+                            Bootstrap Icons
+                        </li>
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></span>
+                            Jinja2 Templates
+                        </li>
+                        <li class="text-gray-200 flex items-center">
+                            <span class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></span>
+                            CSS3 з градієнтами
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Alert -->
+    <div class="bg-blue-500/10 border border-blue-400/30 rounded-xl p-6 backdrop-blur-sm animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+                <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/>
+                </svg>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold text-blue-300 mb-2">Примітка</h4>
+                <p class="text-gray-300">Для додавання, редагування та видалення альбомів необхідно авторизуватися в системі.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+"""
