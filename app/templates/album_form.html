@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{% if album %}Редагувати{% else %}Додати{% endif %} альбом - Music Band{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <section class="space-y-3">
+        <p class="text-[11px] tracking-[0.18em] uppercase text-neutral-500">
+            {% if album %}Редагування{% else %}Створення{% endif %}
+        </p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
+            {% if album %}Редагувати альбом{% else %}Додати новий альбом{% endif %}
+        </h1>
+        <p class="text-sm sm:text-base text-neutral-600 max-w-2xl">
+            Заповніть інформацію про альбом
+        </p>
+    </section>
+
+    <section class="rounded-xl border border-neutral-200 bg-white px-5 sm:px-7 py-7 sm:py-8">
+        <form method="POST" class="space-y-5">
+            {{ form.hidden_tag() }}
+
+            <div>
+                {{ form.title.label(class="block text-xs font-medium text-neutral-800 mb-1.5") }}
+                {{ form.title(class="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900", placeholder="Введіть назву альбому") }}
+                {% for error in form.title.errors %}
+                    <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.release_date.label(class="block text-xs font-medium text-neutral-800 mb-1.5") }}
+                {{ form.release_date(class="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900") }}
+                {% for error in form.release_date.errors %}
+                    <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.cover_image.label(class="block text-xs font-medium text-neutral-800 mb-1.5") }}
+                {{ form.cover_image(class="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900", placeholder="https://example.com/cover.jpg") }}
+                {% for error in form.cover_image.errors %}
+                    <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                {% endfor %}
+                <p class="mt-1.5 text-xs text-neutral-500">Вставте посилання на зображення обкладинки</p>
+            </div>
+
+            <div>
+                {{ form.description.label(class="block text-xs font-medium text-neutral-800 mb-1.5") }}
+                {{ form.description(class="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900", rows="5", placeholder="Розкажіть про альбом, його концепцію та особливості") }}
+                {% for error in form.description.errors %}
+                    <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                {{ form.submit(class="flex-1 inline-flex justify-center rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-black cursor-pointer") }}
+
+                <a href="{% if album %}{{ url_for('main.album_detail', album_id=album.id) }}{% else %}{{ url_for('main.albums') }}{% endif %}"
+                   class="flex-1 inline-flex justify-center rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-100">
+                    Скасувати
+                </a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}
