@@ -6,11 +6,13 @@ from .forms import LoginForm, RegisterForm
 
 bp = Blueprint('main', __name__)
 
+# Homepage - shows last 3 albums
 @bp.route('/')
 def index():
     albums = Album.query.order_by(Album.release_date.desc()).limit(3).all()
     return render_template('index.html', albums=albums)
 
+# Static pages
 @bp.route('/about')
 def about():
     return render_template('about.html')
@@ -19,21 +21,25 @@ def about():
 def history():
     return render_template('history.html')
 
+# All albums page
 @bp.route('/albums')
 def albums():
     all_albums = Album.query.order_by(Album.release_date.desc()).all()
-    return render_template('album.html', albums=all_albums)
+    return render_template('albums.html', albums=all_albums)
 
+# Single album details page
 @bp.route('/album/<int:album_id>')
 def album_detail(album_id):
     album = Album.query.get_or_404(album_id)
     return render_template('album_detail.html', album=album)
 
+# Latest album shortcut
 @bp.route('/album/latest')
 def latest_album():
     album = Album.query.order_by(Album.id.desc()).first()
     return render_template('album_detail.html', album=album)
 
+# User registration
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -42,6 +48,7 @@ def register():
             flash('Username already exists')
             return redirect(url_for('main.register'))
 
+        # Hash password and create new user
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
         user = User(username=form.username.data, password=hashed_password)
         db.session.add(user)
@@ -50,6 +57,7 @@ def register():
         return redirect(url_for('main.login'))
     return render_template('register.html', form=form)
 
+# User login
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -61,12 +69,14 @@ def login():
         flash('Invalid username or password')
     return render_template('login.html', form=form)
 
+# User logout
 @bp.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
+# Add new album (protected)
 @bp.route('/album/add', methods=['GET', 'POST'])
 @login_required
 def album_add():
@@ -83,6 +93,7 @@ def album_add():
         return redirect(url_for('main.albums'))
     return render_template('album_form.html')
 
+# Edit existing album (protected)
 @bp.route('/album/<int:album_id>/edit', methods=['GET', 'POST'])
 @login_required
 def album_edit(album_id):
@@ -97,6 +108,7 @@ def album_edit(album_id):
         return redirect(url_for('main.album_detail', album_id=album.id))
     return render_template('album_form.html', album=album)
 
+# Delete album (protected)
 @bp.route('/album/<int:album_id>/delete', methods=['POST'])
 @login_required
 def album_delete(album_id):
