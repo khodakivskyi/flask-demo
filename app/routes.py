@@ -26,9 +26,9 @@ def history():
 @bp.route('/albums')
 def albums():
     all_albums = Album.query.order_by(Album.release_date.desc()).all()
-    return render_template('albums.html', albums=all_albums)  # ✅ albums.html для списку
+    return render_template('album.html', albums=all_albums)
 
-# Single album details page ✅ Ендпоінт: main.album_detail
+# Single album details page
 @bp.route('/album/<int:album_id>')
 def album_detail(album_id):
     album = Album.query.get_or_404(album_id)
