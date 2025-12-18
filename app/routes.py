@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import db, Album, User
 from .forms import LoginForm, RegisterForm
+from datetime import datetime
 
 bp = Blueprint('main', __name__)
 
@@ -25,9 +26,9 @@ def history():
 @bp.route('/albums')
 def albums():
     all_albums = Album.query.order_by(Album.release_date.desc()).all()
-    return render_template('albums.html', albums=all_albums)
+    return render_template('albums.html', albums=all_albums)  # ✅ albums.html для списку
 
-# Single album details page
+# Single album details page ✅ Ендпоінт: main.album_detail
 @bp.route('/album/<int:album_id>')
 def album_detail(album_id):
     album = Album.query.get_or_404(album_id)
@@ -105,7 +106,7 @@ def album_edit(album_id):
         album.cover_image = request.form['cover_image']
         db.session.commit()
         flash('Album updated!')
-        return redirect(url_for('main.album_detail', album_id=album.id))
+        return redirect(url_for('main.album_detail', album_id=album_id))
     return render_template('album_form.html', album=album)
 
 # Delete album (protected)
