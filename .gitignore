@@ -1,0 +1,78 @@
+# ======================
+# Python
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ======================
+# Virtual environments
+# ======================
+.venv/
+venv/
+env/
+ENV/
+
+# ======================
+# Flask
+# ======================
+instance/
+.webassets-cache/
+.flaskenv
+
+# ======================
+# Environment variables
+# ======================
+.env
+.env.*
+*.env
+
+# ======================
+# Database
+# ======================
+*.sqlite
+*.sqlite3
+*.db
+
+# ======================
+# Migrations
+# ======================
+migrations/
+alembic.ini
+
+# ======================
+# Logs
+# ======================
+*.log
+
+# ======================
+# OS / Editor
+# ======================
+.DS_Store
+Thumbs.db
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# ======================
+# Testing / Coverage
+# ======================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ======================
+# Build / Distribution
+# ======================
+build/
+dist/
+*.egg-info/
+
+# ======================
+# Cache / Temp
+# ======================
+.cache/
+tmp/
