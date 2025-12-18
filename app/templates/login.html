@@ -3,31 +3,53 @@
 {% block title %}Login - Music Band{% endblock %}
 
 {% block content %}
-<div class="flex justify-center items-center min-h-screen">
-    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
-
-        <form method="POST">
-            {{ form.hidden_tag() }}
-
-            <div class="mb-4">
-                {{ form.username.label(class="block text-gray-700 mb-2") }}
-                {{ form.username(class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-            </div>
-
-            <div class="mb-4">
-                {{ form.password.label(class="block text-gray-700 mb-2") }}
-                {{ form.password(class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-            </div>
-
-            <div class="mb-4 text-center">
-                {{ form.submit(class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded") }}
-            </div>
-
-            <p class="text-center text-gray-600 text-sm">
-                Don't have an account? <a href="{{ url_for('main.register') }}" class="text-blue-500 hover:underline">Register</a>
+<div class="flex justify-center items-center py-10">
+    <div class="w-full max-w-md">
+        <div class="mb-6 text-center">
+            <p class="text-[11px] tracking-[0.18em] text-neutral-500 uppercase">
+                Акаунт
             </p>
-        </form>
+            <h1 class="mt-2 text-2xl font-semibold tracking-tight text-neutral-900">
+                Вхід до системи
+            </h1>
+            <p class="mt-2 text-sm text-neutral-600">
+                Увійдіть, щоб керувати своїм профілем та переглядати закриті розділи.
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-neutral-200 bg-white px-5 py-5">
+            <form method="POST" class="space-y-4">
+                {{ form.hidden_tag() }}
+
+                <div>
+                    {{ form.username.label(class="block text-xs font-medium text-neutral-800 mb-1.5") }}
+                    {{ form.username(class="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900") }}
+                    {% for error in form.username.errors %}
+                        <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    {{ form.password.label(class="block text-xs font-medium text-neutral-800 mb-1.5") }}
+                    {{ form.password(class="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900") }}
+                    {% for error in form.password.errors %}
+                        <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="pt-2">
+                    {{ form.submit(class="w-full inline-flex justify-center rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-black cursor-pointer") }}
+                </div>
+
+            </form>
+
+            <p class="mt-4 text-center text-xs text-neutral-600">
+                Ще немає акаунта?
+                <a href="{{ url_for('main.register') }}" class="font-medium text-neutral-900 hover:underline">
+                    Зареєструватися
+                </a>
+            </p>
+        </div>
     </div>
 </div>
 {% endblock %}
