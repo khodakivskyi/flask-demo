@@ -115,4 +115,3 @@ def delete_album(album_id):
     db.session.commit()
     flash('Album deleted!')
     return redirect(url_for('main.index'))
-
