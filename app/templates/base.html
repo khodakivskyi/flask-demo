@@ -6,9 +6,9 @@
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('index') }}">Головна</a> |
-        <a href="{{ url_for('about') }}">Про проект</a> |
-        <a href="{{ url_for('history') }}">Історія гурту</a>
+        <a href="{{ url_for('main.index') }}">Головна</a> |
+        <a href="{{ url_for('main.about') }}">Про нас</a> |
+        <a href="{{ url_for('main.history') }}">Історія</a>
     </nav>
     <hr>
     {% block content %}{% endblock %}
