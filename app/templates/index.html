@@ -1,86 +1,53 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Music Band{% endblock %}
+{% block title %}Головна - Музичний Гурт{% endblock %}
 
 {% block content %}
-<div class="space-y-10">
-  <section class="space-y-3">
-    <p class="text-[11px] tracking-[0.18em] uppercase text-neutral-500">
-      Music Band
-    </p>
-    <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
-      Домашня сторінка вигаданого музичного гурту
-    </h1>
-    <p class="text-sm sm:text-base text-neutral-600 max-w-2xl leading-relaxed">
-      Цей сайт створений як невеликий навчальний проєкт на Flask. Тут зібрані
-      базові сторінки: опис проєкту, коротка історія гурту та інформація про
-      альбоми, які зберігаються в базі даних.
-    </p>
-    <div class="flex flex-wrap items-center gap-3 pt-1.5">
-      <a href="{{ url_for('main.latest_album') }}"
-         class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-black">
-        Перейти до останнього альбому
-      </a>
-      <a href="{{ url_for('main.about') }}"
-         class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100">
-        Детальніше про проєкт
-      </a>
-    </div>
-  </section>
+<h1>Hello World!</h1>
+<p>Це головна сторінка.</p>
 
-  <section class="grid gap-4 md:grid-cols-3">
-    <div class="rounded-xl border border-neutral-200 bg-white p-4">
-      <h2 class="text-sm font-semibold text-neutral-900">
-        Структура сайту
-      </h2>
-      <p class="mt-2 text-sm text-neutral-600">
-        Головна, сторінка проєкту, історія гурту та сторінки альбомів —
-        мінімальний набір для прикладу невеликого застосунку.
-      </p>
-    </div>
+<div style="margin-top: 30px;">
+    <h2>Ласкаво просимо на офіційний сайт музичного гурту!</h2>
+    <p>Тут ви знайдете інформацію про нашу творчість, історію та альбоми.</p>
+</div>
 
-    <div class="rounded-xl border border-neutral-200 bg-white p-4">
-      <h2 class="text-sm font-semibold text-neutral-900">
-        Технічна частина
-      </h2>
-      <p class="mt-2 text-sm text-neutral-600">
-        Flask, шаблони Jinja2, робота з формами та базою даних SQLite
-        через SQLAlchemy.
-      </p>
-    </div>
+<div style="margin-top: 40px;">
+    <h3>Що ви можете знайти на нашому сайті:</h3>
+    <ul style="line-height: 1.8;">
+        <li><strong>Про проект</strong> - дізнайтеся більше про гурт та його місію</li>
+        <li><strong>Історія гурту</strong> - шлях від початку до сьогодення</li>
+        <li><strong>Альбоми</strong> - перегляньте нашу дискографію з детальною інформацією</li>
+    </ul>
+</div>
 
-    <div class="rounded-xl border border-neutral-200 bg-white p-4">
-      <h2 class="text-sm font-semibold text-neutral-900">
-        Альбоми
-      </h2>
-      <p class="mt-2 text-sm text-neutral-600">
-        Дані про альбоми зберігаються у базі даних. Нижче — список доступних записів.
-      </p>
-    </div>
-  </section>
-
-  <section class="space-y-3">
-    <h2 class="text-sm font-semibold text-neutral-900">
-      Альбоми гурту
-    </h2>
-    <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-      {% for album in albums %}
-      <a href="{{ url_for('main.album', album_id=album.id) }}"
-         class="rounded-lg border border-neutral-200 bg-white px-3 py-3 hover:bg-neutral-50">
-        <div class="text-sm font-medium text-neutral-900">
-          {{ album.title }}
+{% if albums %}
+<div style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-radius: 5px;">
+    <h3>Останні альбоми</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+        {% for album in albums %}
+        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: white;">
+            {% if album.cover_image %}
+            <img src="{{ album.cover_image }}" alt="{{ album.title }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+            {% else %}
+            <div style="width: 100%; height: 200px; background-color: #ddd; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-bottom: 10px;">
+                <span style="font-size: 48px;">🎵</span>
+            </div>
+            {% endif %}
+            <h4 style="margin: 10px 0;">{{ album.title }}</h4>
+            <p style="color: #666; font-size: 14px;">{{ album.release_date }}</p>
+            <a href="{{ url_for('main.album_detail', album_id=album.id) }}" style="display: inline-block; padding: 8px 15px; background-color: #333; color: white; text-decoration: none; border-radius: 3px; margin-top: 10px;">Детальніше</a>
         </div>
-        <div class="mt-1 text-xs text-neutral-600">
-          Рік: {{ album.year }}
-        </div>
-      </a>
-      {% endfor %}
-      {% if not albums %}
-      <p class="text-sm text-neutral-500">
-        Альбоми поки не додані.
-      </p>
-      {% endif %}
+        {% endfor %}
     </div>
-  </section>
+</div>
+{% else %}
+<div style="margin-top: 40px; padding: 20px; background-color: #fff3cd; border-radius: 5px; border: 1px solid #ffc107;">
+    <p style="margin: 0;">Альбомів поки немає. {% if current_user.is_authenticated %}<a href="{{ url_for('main.album_add') }}">Додайте перший альбом!</a>{% endif %}</p>
+</div>
+{% endif %}
+
+<div style="margin-top: 40px; text-align: center; padding: 30px; background-color: #e8f4f8; border-radius: 5px;">
+    <h3>Слідкуйте за нашими новинами!</h3>
+    <p>Підписуйтесь на наші соціальні мережі, щоб бути в курсі всіх подій.</p>
 </div>
 {% endblock %}

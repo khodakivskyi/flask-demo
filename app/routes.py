@@ -22,7 +22,7 @@ def history():
 @bp.route('/albums')
 def albums():
     all_albums = Album.query.order_by(Album.release_date.desc()).all()
-    return render_template('albums.html', albums=all_albums)
+    return render_template('album.html', albums=all_albums)
 
 @bp.route('/album/<int:album_id>')
 def album_detail(album_id):

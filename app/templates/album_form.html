@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{% if album %}Редагувати{% else %}Додати{% endif %} альбом - Музичний Гурт{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">
+            {% if album %}Редагувати альбом{% else %}Додати новий альбом{% endif %}
+        </h1>
+        <p class="text-gray-400">Заповніть інформацію про альбом</p>
+    </div>
+
+    <div class="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-2xl p-8">
+        <form method="POST" class="space-y-6">
+            <div>
+                <label for="title" class="block text-sm font-medium text-white mb-2">
+                    Назва альбому *
+                </label>
+                <input type="text"
+                       id="title"
+                       name="title"
+                       value="{% if album %}{{ album.title }}{% endif %}"
+                       required
+                       class="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                       placeholder="Введіть назву альбому">
+            </div>
+
+            <div>
+                <label for="release_date" class="block text-sm font-medium text-white mb-2">
+                    Дата випуску *
+                </label>
+                <input type="date"
+                       id="release_date"
+                       name="release_date"
+                       value="{% if album %}{{ album.release_date }}{% endif %}"
+                       required
+                       class="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            </div>
+
+            <div>
+                <label for="cover_image" class="block text-sm font-medium text-white mb-2">
+                    URL обкладинки
+                </label>
+                <input type="url"
+                       id="cover_image"
+                       name="cover_image"
+                       value="{% if album %}{{ album.cover_image }}{% endif %}"
+                       class="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                       placeholder="https://example.com/cover.jpg">
+                <p class="mt-2 text-xs text-gray-500">Вставте посилання на зображення обкладинки</p>
+            </div>
+
+            <div>
+                <label for="description" class="block text-sm font-medium text-white mb-2">
+                    Опис альбому
+                </label>
+                <textarea id="description"
+                          name="description"
+                          rows="5"
+                          class="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="Розкажіть про альбом, його концепцію та особливості">{% if album %}{{ album.description }}{% endif %}</textarea>
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button type="submit"
+                        class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    {% if album %}Зберегти зміни{% else %}Додати альбом{% endif %}
+                </button>
+
+                <a href="{% if album %}{{ url_for('main.album_detail', album_id=album.id) }}{% else %}{{ url_for('main.albums') }}{% endif %}"
+                   class="px-6 py-3 bg-gray-700 text-white font-semibold rounded-xl hover:bg-gray-600 transition-all duration-300">
+                    Скасувати
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
