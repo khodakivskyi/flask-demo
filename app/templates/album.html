@@ -1,117 +1,89 @@
 {% extends "base.html" %}
 
-{% block title %}Альбоми - Музичний Гурт{% endblock %}
-
-{% block extra_css %}
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
-    .gradient-text-albums {
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .album-card { transition: all 0.3s ease; }
-    .album-card:hover { transform: translateY(-8px); }
-</style>
-{% endblock %}
+{% block title %}Альбоми - Music Band{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-12 animate-fade-in-up">
-        <div>
-            <h1 class="text-5xl md:text-6xl font-black gradient-text-albums mb-2 tracking-tight">Альбоми</h1>
-            <p class="text-gray-400 text-lg">Наша дискографія</p>
+<div class="space-y-10">
+    <section class="space-y-3">
+        <p class="text-[11px] tracking-[0.18em] uppercase text-neutral-500">
+            Дискографія
+        </p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
+                    Альбоми гурту
+                </h1>
+                <p class="mt-2 text-sm sm:text-base text-neutral-600 max-w-2xl">
+                    Всі релізи та записи колективу
+                </p>
+            </div>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.album_add') }}"
+               class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-black">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                </svg>
+                Додати альбом
+            </a>
+            {% endif %}
         </div>
-        {% if current_user.is_authenticated %}
-        <a href="{{ url_for('main.album_add') }}"
-           class="mt-6 md:mt-0 inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg shadow-purple-500/50">
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-            </svg>
-            Додати альбом
-        </a>
-        {% endif %}
-    </div>
+    </section>
 
     {% if albums %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up" style="animation-delay: 0.1s;">
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {% for album in albums %}
-        <div class="album-card group relative">
-            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-0 group-hover:opacity-25 transition duration-300"></div>
-
-            <div class="relative bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-2xl overflow-hidden hover:border-purple-500/50 transition-all duration-300">
-                <div class="relative h-64 overflow-hidden bg-gray-800">
-                    {% if album.cover_image %}
-                    <img src="{{ album.cover_image }}" alt="{{ album.title }}"
-                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    {% else %}
-                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                        <svg class="w-24 h-24 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
-                        </svg>
-                    </div>
-                    {% endif %}
-
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                        <a href="{{ url_for('main.album_detail', album_id=album.id) }}"
-                           class="px-6 py-2 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
-                            Переглянути
-                        </a>
-                    </div>
-                </div>
-
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-white mb-2 line-clamp-1">{{ album.title }}</h3>
-
-                    <div class="flex items-center text-gray-400 text-sm mb-3">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                        </svg>
-                        {{ album.release_date }}
-                    </div>
-
-                    {% if album.description %}
-                    <p class="text-gray-500 text-sm line-clamp-2 mb-4">{{ album.description }}</p>
-                    {% endif %}
-
-                    <a href="{{ url_for('main.album_detail', album_id=album.id) }}"
-                       class="inline-flex items-center text-purple-400 hover:text-purple-300 font-medium text-sm transition-colors">
-                        Детальніше
-                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                    </a>
-                </div>
+        <a href="{{ url_for('main.album_detail', album_id=album.id) }}"
+           class="group rounded-xl border border-neutral-200 bg-white overflow-hidden hover:border-neutral-300 hover:shadow-sm transition-all">
+            {% if album.cover_image %}
+            <div class="aspect-square overflow-hidden bg-neutral-100">
+                <img src="{{ album.cover_image }}" alt="{{ album.title }}"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
             </div>
-        </div>
+            {% else %}
+            <div class="aspect-square flex items-center justify-center bg-neutral-100">
+                <svg class="w-16 h-16 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                </svg>
+            </div>
+            {% endif %}
+            <div class="p-4">
+                <h3 class="text-sm font-semibold text-neutral-900 mb-1.5 line-clamp-1">
+                    {{ album.title }}
+                </h3>
+                <div class="flex items-center text-xs text-neutral-600 mb-2">
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ album.release_date }}
+                </div>
+                {% if album.description %}
+                <p class="text-xs text-neutral-600 line-clamp-2">
+                    {{ album.description }}
+                </p>
+                {% endif %}
+            </div>
+        </a>
         {% endfor %}
-    </div>
-
+    </section>
     {% else %}
-    <div class="text-center py-20 animate-fade-in-up">
-        <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded-full mb-6">
-            <svg class="w-12 h-12 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+    <section class="rounded-xl border border-neutral-200 bg-white px-5 sm:px-7 py-12 text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 mb-4">
+            <svg class="w-8 h-8 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
             </svg>
         </div>
-        <h3 class="text-2xl font-bold text-white mb-3">Альбомів поки немає</h3>
-        <p class="text-gray-400 mb-6">Почніть додавати альбоми до вашої колекції</p>
+        <h3 class="text-base font-semibold text-neutral-900 mb-2">Альбомів поки немає</h3>
+        <p class="text-sm text-neutral-600 mb-6">Почніть додавати альбоми до вашої колекції</p>
         {% if current_user.is_authenticated %}
         <a href="{{ url_for('main.album_add') }}"
-           class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg shadow-purple-500/50">
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+           class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-black">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
             </svg>
             Додати перший альбом
         </a>
         {% endif %}
-    </div>
+    </section>
     {% endif %}
 </div>
 {% endblock %}
