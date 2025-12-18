@@ -2,20 +2,21 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import db, Album, User
-from .forms import LoginForm, RegisterForm
-from datetime import datetime
+from .forms import LoginForm, RegisterForm, AlbumForm
+from .services.album_service import (
+    create_album, get_album, update_album, delete_album
+)
 
 bp = Blueprint('main', __name__)
 
 
-# Homepage - shows last 3 albums
+# === PUBLIC PAGES ===
 @bp.route('/')
 def index():
     albums = Album.query.order_by(Album.release_date.desc()).limit(3).all()
     return render_template('index.html', albums=albums)
 
 
-# Static pages
 @bp.route('/about')
 def about():
     return render_template('about.html')
@@ -26,28 +27,25 @@ def history():
     return render_template('history.html')
 
 
-# All albums page
 @bp.route('/albums')
 def albums():
     all_albums = Album.query.order_by(Album.release_date.desc()).all()
     return render_template('album.html', albums=all_albums)
 
 
-# Single album details page
 @bp.route('/album/<int:album_id>')
 def album_detail(album_id):
-    album = Album.query.get_or_404(album_id)
+    album = get_album(album_id)
     return render_template('album_detail.html', album=album)
 
 
-# Latest album shortcut
 @bp.route('/album/latest')
 def latest_album():
     album = Album.query.order_by(Album.id.desc()).first()
     return render_template('album_detail.html', album=album)
 
 
-# User registration
+# === AUTH ===
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -59,7 +57,6 @@ def register():
             flash('Це ім\'я користувача вже зайняте')
             return redirect(url_for('main.register'))
 
-        # Hash password and create new user
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
         user = User(username=form.username.data, password=hashed_password)
         db.session.add(user)
@@ -69,7 +66,6 @@ def register():
     return render_template('register.html', form=form)
 
 
-# User login
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -87,7 +83,6 @@ def login():
     return render_template('login.html', form=form)
 
 
-# User logout
 @bp.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
@@ -96,48 +91,58 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-# Add new album (protected)
+# === ALBUM CRUD (PROTECTED) ===
 @bp.route('/album/add', methods=['GET', 'POST'])
 @login_required
 def album_add():
-    if request.method == 'POST':
-        title = request.form['title']
-        description = request.form['description']
-        release_date = request.form['release_date']
-        cover_image = request.form['cover_image']
-        album = Album(title=title, description=description,
-                      release_date=release_date, cover_image=cover_image)
-        db.session.add(album)
-        db.session.commit()
-        flash(f'Альбом "{title}" успішно додано!')
+    form = AlbumForm()
+    if form.validate_on_submit():
+        album = create_album(
+            form.title.data,
+            form.description.data,
+            form.release_date.data,
+            form.cover_image.data
+        )
+        flash(f'Альбом "{album.title}" успішно додано!')
         return redirect(url_for('main.albums'))
-    return render_template('album_form.html')
+    return render_template('album_form.html', form=form)
 
 
-# Edit existing album (protected)
 @bp.route('/album/<int:album_id>/edit', methods=['GET', 'POST'])
 @login_required
 def album_edit(album_id):
-    album = Album.query.get_or_404(album_id)
-    if request.method == 'POST':
-        title = request.form['title']
-        album.title = title
-        album.description = request.form['description']
-        album.release_date = request.form['release_date']
-        album.cover_image = request.form['cover_image']
-        db.session.commit()
-        flash(f'Альбом "{title}" успішно оновлено!')
+    form = AlbumForm()
+    album = get_album(album_id)
+
+    if form.validate_on_submit():
+        updated_album = update_album(
+            album_id,
+            form.title.data,
+            form.description.data,
+            form.release_date.data,
+            form.cover_image.data
+        )
+        flash(f'Альбом "{updated_album.title}" успішно оновлено!')
         return redirect(url_for('main.album_detail', album_id=album_id))
-    return render_template('album_form.html', album=album)
+
+    form.title.data = album.title
+    form.description.data = album.description
+    form.cover_image.data = album.cover_image
+
+    try:
+        from datetime import datetime
+        date_str = album.release_date
+        if date_str:
+            form.release_date.data = datetime.strptime(date_str, '%Y-%m-%d').date()
+    except:
+        form.release_date.data = None
+
+    return render_template('album_form.html', form=form, album=album)
 
 
-# Delete album (protected)
 @bp.route('/album/<int:album_id>/delete', methods=['POST'])
 @login_required
 def album_delete(album_id):
-    album = Album.query.get_or_404(album_id)
-    title = album.title
-    db.session.delete(album)
-    db.session.commit()
+    title = delete_album(album_id)
     flash(f'Альбом "{title}" успішно видалено!')
     return redirect(url_for('main.albums'))
